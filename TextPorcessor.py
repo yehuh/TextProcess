@@ -18,8 +18,12 @@ client.connect(ip_addr, 22, username, password, timeout=10)
 sftp_client = client.open_sftp()
 remote_file = sftp_client.open(path + file_name)
 
+output_path = 'remoteFile_' +str_today+".txt"
+out_file = open(output_path, 'w')
+
 line_cnt = 0
 for line in remote_file.readlines():
+    out_file.write(line.strip()+"\n")
     line_cnt = line_cnt+1
     if line_cnt < 3000:
         continue
@@ -30,4 +34,4 @@ for line in remote_file.readlines():
     str_buff = "Line " + str(line_cnt)+": "
     print((str_buff + line).strip())
 remote_file.close()
-
+out_file.close
