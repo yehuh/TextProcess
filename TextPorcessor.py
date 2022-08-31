@@ -8,7 +8,7 @@ str_today = time.strftime("%Y-%m-%d", struct_time) # 將時間元組轉
 #str_today = "2022-07-12"
 
 #file_name = (str_today+".txt").strip()
-file_name = "2022-08-25.txt"
+file_name = "2022-08-31.txt"
 ip_addr = "10.56.40.153"#"10.56.30.120"#"10.56.40.153"
 username='myuser'
 password='a'
@@ -23,26 +23,29 @@ remote_file = sftp_client.open(path + file_name)
 
 output_path = 'remoteFile_' +str_today+".txt"
 out_file = open(output_path, 'w')
-the_str = "[CMD : 0x17]"
+the_str = "[CMD : 0xC0]"
+time_str = "2022"
 line_cnt = 0
 for line in remote_file.readlines():
     out_file.write(line.strip()+"\n")
     line_cnt = line_cnt+1
     if "MCU->PC" not in line:
         continue
-    if "[CMD : 0x17]" not in line:
+    if "[CMD : 0xC0]" not in line:
         continue
-    if line_cnt < 1180:
+    if line_cnt < 100:
         continue
     #if "parseTagData" not in line:
     #    continue
     #if "Update StateObject.current_NodeNo" in line:
     #    continue
+    time_id = 0
+    time_str_cnt = 19
+    time_str = line[time_id: time_id + time_str_cnt]
     str_buff = "Line " + str(line_cnt)+": "
     the_str_id = line.find(the_str)
     cutted_str = line[the_str_id:]
+    print(('%-20s' % time_str + '%-12s' % str_buff + cutted_str).strip())
     
-    print(('%-12s' % str_buff + cutted_str).strip())
-    #print((str_buff + line).strip())
 remote_file.close()
 out_file.close
